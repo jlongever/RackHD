@@ -94,6 +94,9 @@ class NodesTests(object):
         return timeout
 
     def check_compute_count(self):
+        count = defaults.get('RACKHD_NODE_COUNT', '')
+        if count.isdigit():
+            return int(count)
         Nodes().nodes_get()
         nodes = self.__get_data()
         count = 0
@@ -106,7 +109,7 @@ class NodesTests(object):
     @test(groups=['nodes.discovery.test'])
     def test_nodes_discovery(self):
         """ Testing Graph.Discovery completion """
-        if self.check_compute_count():
+        if self.check_compute_count() == self.__discovered:
             LOG.warning('Nodes already discovered!')
             return
         self.__discovery_duration = datetime.now()
